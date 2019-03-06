@@ -88,7 +88,7 @@ plt.plot(np.arange(1,41),1-s,marker='o')
 plt.legend(('Train','CV','Test'))
 plt.show()
 
-
+print(s[:,1].argmax(),s[:,1].max())
 
 
 
