@@ -1,0 +1,22 @@
+import pandas as pd
+
+df = pd.read_csv("./data/Clean_Dataset.csv")
+
+df.drop([df.columns[0]], axis=1,inplace = True)
+
+# 1. ZScore
+df[abs((df['price']-df['price'].mean()))/df['price'].std()>1.96]
+
+# 2. IQR
+def findOutliers(x, column):
+    q1 = x[column].quantile(0.25)
+    q3 = x[column].quantile(0.75)
+    iqr = 1.5*(q3-q1)
+    
+    y=x[(x[column]>(q3+iqr))|(x[column]<(q1-iqr))]
+    
+    return len(y)
+
+print("price IQR Outliers :", findOutliers(df,'price'))
+print("duration IQR Outliers :", findOutliers(df,'duration'))
+print("days_left IQR Outliers :", findOutliers(df,'days_left'))
