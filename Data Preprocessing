@@ -20,3 +20,13 @@ def findOutliers(x, column):
 print("price IQR Outliers :", findOutliers(df,'price'))
 print("duration IQR Outliers :", findOutliers(df,'duration'))
 print("days_left IQR Outliers :", findOutliers(df,'days_left'))
+
+# 3. boxplot
+import matplotlib.pyplot as plt
+
+plt.figure()
+plt.subplot(151)
+df[['duration']].boxplot()
+plt.ylabel("Time")
+
+plt.show()
