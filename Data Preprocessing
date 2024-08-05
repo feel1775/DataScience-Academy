@@ -30,3 +30,20 @@ df[['duration']].boxplot()
 plt.ylabel("Time")
 
 plt.show()
+
+# 4. 이상치 데이터 대체하기
+def changeOutliers(x, column):
+    q1 = x[column].quantile(0.25)
+    q3 = x[column].quantile(0.75)
+    iqr = 1.5*(q3-q1)
+
+    Min = (q1 - iqr)
+    Max = q3 + iqr
+
+    x.loc[(x[column] > Max), column] = Max
+    x.loc[(x[column] < Min), column] = Min
+
+    return(x)
+
+clean_df=changeOutliers(df,'price')
+clean_df.info()
