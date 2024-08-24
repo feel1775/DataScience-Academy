@@ -1,0 +1,18 @@
+
+주요 파라미터
+estimator: 최적화할 모델(예: 분류기, 회귀기)을 지정합니다. 예를 들어, LogisticRegression(), RandomForestClassifier() 등이 될 수 있습니다.
+param_grid: 하이퍼파라미터 값의 딕셔너리 또는 리스트입니다. 각 키는 하이퍼파라미터 이름이고, 값은 해당 하이퍼파라미터의 가능한 값들의 리스트입니다.
+Python
+
+param_grid = {
+    'C': [0.1, 1, 10],
+    'solver': ['liblinear', 'saga']
+}
+scoring: 모델 평가를 위한 성능 지표를 지정합니다. 예를 들어, 'accuracy', 'f1', 'roc_auc' 등이 있습니다. 기본값은 None이며, 이 경우 estimator의 기본 평가 지표가 사용됩니다.
+n_jobs: 병렬 처리를 위한 CPU 코어 수를 지정합니다. -1로 설정하면 모든 코어를 사용합니다. 기본값은 None입니다.
+cv: 교차 검증을 위한 폴드 수를 지정합니다. 기본값은 5입니다. StratifiedKFold와 같은 교차 검증 객체를 사용할 수도 있습니다.
+refit: 최적의 하이퍼파라미터 조합으로 전체 데이터셋에 대해 estimator를 재학습할지 여부를 지정합니다. 기본값은 True입니다.
+verbose: 실행 중 출력되는 메시지의 상세 수준을 지정합니다. 값이 클수록 더 많은 메시지가 출력됩니다. 기본값은 0입니다.
+pre_dispatch: 병렬 실행 시 작업을 미리 할당할 수 있는 작업 수를 지정합니다. 기본값은 '2*n_jobs'입니다.
+error_score: 오류 발생 시 할당할 점수를 지정합니다. 기본값은 np.nan입니다.
+return_train_score: 훈련 점수를 반환할지 여부를 지정합니다. 기본값은 False입니다.
