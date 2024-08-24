@@ -1,0 +1,79 @@
+스태킹(Stacking)은 여러 개의 개별 모델을 결합하여 최종 예측을 도출하는 앙상블 학습 기법 중 하나입니다. 스태킹은 특히 서로 다른 알고리즘을 결합하여 예측 성능을 향상시키는 데 효과적입니다¹².
+
+### 스태킹의 구조
+
+1. **1단계: 기본 모델 학습**:
+   - 여러 개의 기본 모델(base models)을 학습시킵니다. 이 모델들은 서로 다른 알고리즘을 사용하거나, 같은 알고리즘이라도 다른 하이퍼파라미터를 사용할 수 있습니다.
+   - 각 기본 모델은 훈련 데이터에 대해 예측을 수행합니다.
+
+2. **2단계: 메타 모델 학습**:
+   - 기본 모델들의 예측 결과를 새로운 데이터셋으로 사용하여 메타 모델(meta model)을 학습시킵니다.
+   - 메타 모델은 기본 모델들의 예측을 입력으로 받아 최종 예측을 수행합니다.
+
+### 예제 코드
+
+다음은 `scikit-learn`을 사용하여 스태킹을 구현하는 간단한 예제입니다:
+
+```python
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import StackingClassifier
+from sklearn.metrics import accuracy_score
+
+# 데이터 로드
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 데이터 분할
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 기본 모델 정의
+base_models = [
+    ('rf', RandomForestClassifier(n_estimators=10, random_state=42)),
+    ('gb', GradientBoostingClassifier(n_estimators=10, random_state=42))
+]
+
+# 메타 모델 정의
+meta_model = LogisticRegression()
+
+# 스태킹 모델 정의
+stacking_model = StackingClassifier(estimators=base_models, final_estimator=meta_model)
+
+# 모델 학습
+stacking_model.fit(X_train, y_train)
+
+# 예측
+y_pred = stacking_model.predict(X_test)
+
+# 정확도 평가
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+```
+
+이 예제에서는 랜덤 포레스트와 그래디언트 부스팅을 기본 모델로 사용하고, 로지스틱 회귀를 메타 모델로 사용하여 스태킹을 구현했습니다¹².
+
+### 장점과 단점
+
+**장점**:
+- 여러 모델의 강점을 결합하여 예측 성능을 향상시킬 수 있습니다.
+- 다양한 알고리즘을 결합하여 더 강력한 모델을 만들 수 있습니다.
+
+**단점**:
+- 계산 비용이 높고, 학습 시간이 오래 걸릴 수 있습니다.
+- 과적합의 위험이 있습니다³.
+
+스태킹은 특히 복잡한 문제에서 강력한 성능을 발휘할 수 있는 기법입니다. 추가로 궁금한 점이 있으면 언제든지 물어보세요! 😊
+
+¹: [바람돌이/머신러닝](https://m.blog.naver.com/winddori2002/221848433173)
+²: [머신러닝 앙상블 기법](https://hongej-coding.tistory.com/entry/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D-%EC%95%99%EC%83%81%EB%B8%94Ensemble-%EA%B8%B0%EB%B2%95%EC%8A%A4%ED%83%9C%ED%82%B9Stacking%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC)
+³: [ML Note](https://mldiary.tistory.com/35)
+
+원본: Copilot과의 대화, 2024. 8. 24.
+(1) [바람돌이/머신러닝] 앙상블(Ensemble Learning)(3) - 스태킹(Stacking .... https://m.blog.naver.com/winddori2002/221848433173.
+(2) [머신러닝] 앙상블(Ensemble) 기법_스태킹(Stacking)_개념 정리. https://bing.com/search?q=%ec%8a%a4%ed%83%9c%ed%82%b9+%ec%95%99%ec%83%81%eb%b8%94+%eb%aa%a8%eb%8d%b8+%ec%9e%90%ec%84%b8%ed%95%9c+%ec%84%a4%eb%aa%85.
+(3) [머신러닝] 앙상블(Ensemble) 기법_스태킹(Stacking)_개념 정리. https://hongej-coding.tistory.com/entry/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D-%EC%95%99%EC%83%81%EB%B8%94Ensemble-%EA%B8%B0%EB%B2%95%EC%8A%A4%ED%83%9C%ED%82%B9Stacking%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC.
+(4) 스태킹 앙상블 (Stacking Ensemble) - ML Note. https://mldiary.tistory.com/35.
+(5) 앙상블 스태킹(Stacking) 기법. https://jotte.tistory.com/54.
